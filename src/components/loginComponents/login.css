@@ -1,0 +1,31 @@
+.image {
+    background-image: url(https://source.unsplash.com/random);
+    background-repeat: no-repeat;
+    background-color: gray ;
+      /* theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900], */
+    background-size: cover;
+    background-position: center;
+}
+.paper {
+    margin:calc(8*8px) calc(4*8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .avatar {
+    margin: calc(1*8px);
+    background-color:#4791db;
+  }
+  .form {
+    width: 100%;
+    margin-top:calc(1*8px);
+  }
+  .submit {
+    margin: calc(3*8px) 0px calc(2*8px);
+  }
+  .root {
+    height:100vh;
+  }
+  .custom{
+      float: left;
+  }
