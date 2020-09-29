@@ -11,10 +11,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Axios from "axios";
 import React, { Component } from "react";
 import "../loginComponents/login.css";
-import Signup from "./signup";
-import { Link } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -29,9 +28,56 @@ function Copyright() {
   );
 }
 export class login extends Component {
+
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       email:'',
+       password:'',
+       isLoggedIn:false
+    }
+    this.handleEmail=this.handleEmail.bind(this);
+    this.handlePassword=this.handlePassword.bind(this);
+  }
+handleEmail=(event)=>{
+  this.setState({
+    email:event.target.value
+  });
+}
+handlePassword=(event)=>{
+  this.setState({
+    password:event.target.value
+  });
+} 
+handelSubmit=(event)=>{
+
+  event.preventDefault();
+  let Datas={
+    "email": this.state.email,
+    "password": this.state.password
+}
+  Axios.post('https://reqres.in/api/login', Datas)
+  .then(response => this.setState({ isLoggedIn: true },
+    console.log(response),
+    localStorage.setItem("token",response.data.token)
+    ))
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    
+}
+
+logout=()=>{
+  localStorage.setItem("token","")
+  History.replace("/")
+}
   render() {
-    return (
-      <Grid container component="main" className="root">
+    const isLoggedIn = localStorage.getItem("token")
+    if (isLoggedIn === "") {
+      return (
+        <Grid container component="main" className="root">
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className="image" />
         <Grid
@@ -50,7 +96,7 @@ export class login extends Component {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className="form" noValidate>
+            <form className="form" noValidate onSubmit={this.handelSubmit}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -61,6 +107,7 @@ export class login extends Component {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={this.handleEmail}
               />
               <TextField
                 variant="outlined"
@@ -72,6 +119,7 @@ export class login extends Component {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={this.handlePassword}
               />
               <FormControlLabel
                 className="custom"
@@ -105,8 +153,17 @@ export class login extends Component {
             </form>
           </div>
         </Grid>
-      </Grid>
-    );
+      </Grid>);
+    } 
+    else {
+     return (
+       <React.Fragment>
+         <h1>Welcome</h1>
+         <Button onClick={this.logout}>Logout</Button>
+       </React.Fragment>
+     );
+    }
+   
   }
 }
 

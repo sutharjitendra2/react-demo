@@ -13,16 +13,26 @@ import {
 import React, { Component } from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import "./login.css";
+import Axios from "axios";
+
 export class signup extends Component {
+ 
   constructor(props) {
     super(props);
-
     this.state = {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      error: null,
+      isLoaded: false,
+      datas:''
     };
+    this.handelFirstName = this.handelFirstName.bind(this);
+    this.handelLastName = this.handelLastName.bind(this);
+    this.handelEmail = this.handelEmail.bind(this);
+    this.handelPassword = this.handelPassword.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
   handelFirstName = (event) => {
     this.setState({ firstName: event.target.value });
@@ -38,9 +48,20 @@ export class signup extends Component {
   };
   submitHandler(event) {
     event.preventDefault();
-    alert(`${this.state.firstName} ${this.state.lastName} ${this.state.email}`);
+    
+    const article ={
+     
+      "email": this.state.email,
+      "password": this.state.password
+  };
+    Axios.post('https://reqres.in/api/articles', article)
+        .then(response => this.setState({ datas: response.data.id },
+          ));
   }
 
+  componentDidMount() {
+    
+  }
   render() {
     return (
       <Container component="main" maxWidth="xs">
@@ -76,6 +97,7 @@ export class signup extends Component {
                   label="Last Name"
                   name="lastName"
                   autoComplete="lname"
+                  value={this.state.datas}
                   onChange={this.handelLastName}
                 />
               </Grid>
